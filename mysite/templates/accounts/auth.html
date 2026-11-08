@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}ورود و ثبت‌نام | رزومه{% endblock %}
+{% block content %}
+<section class="container auth-single">
+  <div class="card" id="loginCard" {% if show_register %}hidden{% endif %}>
+    <h2 class="section-title">ورود</h2>
+    <form method="post" action="{% url 'accounts:do_login' %}" class="form">
+      {% csrf_token %}
+      {{ login_form.as_p }}
+      <button class="btn btn-primary btn-block" type="submit">ورود</button>
+    </form>
+    <p class="switch-text">حساب کاربری ندارید؟</p>
+    <button class="btn btn-outline btn-block" type="button" data-switch="registerCard">ثبت‌نام</button>
+  </div>
+
+  <div class="card" id="registerCard" {% if not show_register %}hidden{% endif %}>
+    <h2 class="section-title">ثبت‌نام</h2>
+    <form method="post" enctype="multipart/form-data" action="{% url 'accounts:do_register' %}" class="form">
+      {% csrf_token %}
+      {{ register_form.as_p }}
+      <button class="btn btn-primary btn-block" type="submit">ساخت حساب</button>
+    </form>
+    <button class="btn btn-ghost btn-block" type="button" data-switch="loginCard">بازگشت به ورود</button>
+  </div>
+</section>
+<script>
+document.querySelectorAll('[data-switch]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var target = btn.dataset.switch;
+    document.getElementById('loginCard').hidden = target !== 'loginCard';
+    document.getElementById('registerCard').hidden = target !== 'registerCard';
+  });
+});
+</script>
+{% endblock %}
